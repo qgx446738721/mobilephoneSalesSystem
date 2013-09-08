@@ -1,0 +1,48 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AddMobilephone	mobilephone.cpp	/^void AddMobilephone()\/\/添加手机信息$/;"	f
+AddSalesList	mobilephone.cpp	/^bool AddSalesList()\/\/添加销售列表$/;"	f
+ChangeMobilephoneMessage	mobilephone.cpp	/^bool ChangeMobilephoneMessage()\/\/修改手机信息,修改成功返回true,失败返回false$/;"	f
+ChangeSalesList	mobilephone.cpp	/^bool ChangeSalesList()\/\/修改销售列表$/;"	f
+DeleteMobilephone	mobilephone.cpp	/^bool DeleteMobilephone()\/\/删除手机,修改成功返回true,失败返回false$/;"	f
+DeleteSalesList	mobilephone.cpp	/^bool DeleteSalesList()\/\/删除销售列表,删除成功返回true$/;"	f
+FindMobilephone	mobilephone.cpp	/^void FindMobilephone()\/\/查询$/;"	f
+Intput	mobilephone.cpp	/^mobilephone mobilephone::Intput()\/\/输入手机信息$/;"	f	class:mobilephone
+Output	mobilephone.cpp	/^void mobilephone::Output()\/\/输出手机的编号，厂商，型号，进价，入库日期，出售价格，出售日期$/;"	f	class:mobilephone
+OutputCompanyAndModel	mobilephone.cpp	/^void OutputCompanyAndModel(phone p)\/\/通过厂商和型号进行查找手机$/;"	f
+ReadFile	mobilephone.cpp	/^void ReadFile()\/\/读取文件到内存中$/;"	f
+WriteFile	mobilephone.cpp	/^void WriteFile()\/\/写入内存中的数据到文件$/;"	f
+company	mobilephone.cpp	/^    string company;\/\/厂商$/;"	m	class:phone	file:
+getCompany	mobilephone.cpp	/^   string getCompany() { return company; }$/;"	f	class:phone
+getId	mobilephone.cpp	/^    string getId() { return id; }$/;"	f	class:mobilephone
+getInPrice	mobilephone.cpp	/^   double getInPrice() { return inPrice; }$/;"	f	class:phone
+getInTime	mobilephone.cpp	/^    int getInTime() { return inTime; }$/;"	f	class:mobilephone
+getModel	mobilephone.cpp	/^   string getModel() { return model; }$/;"	f	class:phone
+getOutPrice	mobilephone.cpp	/^    double getOutPrice() { return outPrice; }$/;"	f	class:mobilephone
+getOutTime	mobilephone.cpp	/^    int getOutTime() { return outTime; }$/;"	f	class:mobilephone
+getSell	mobilephone.cpp	/^    bool getSell() { return sell; }$/;"	f	class:mobilephone
+id	mobilephone.cpp	/^    string id;\/\/编号$/;"	m	class:mobilephone	file:
+inPrice	mobilephone.cpp	/^    double inPrice;\/\/进价$/;"	m	class:phone	file:
+inTime	mobilephone.cpp	/^    int inTime;\/\/入库时间$/;"	m	class:mobilephone	file:
+main	mobilephone.cpp	/^int main()$/;"	f
+mobile	mobilephone.cpp	/^vector<mobilephone>mobile;\/\/手机数组$/;"	v
+mobilephone	mobilephone.cpp	/^class mobilephone : public phone$/;"	c	file:
+mobilephone	mobilephone.cpp	/^mobilephone::mobilephone()\/\/初始化手机$/;"	f	class:mobilephone
+model	mobilephone.cpp	/^    string model;\/\/型号$/;"	m	class:phone	file:
+outPrice	mobilephone.cpp	/^    double outPrice;\/\/出售价格$/;"	m	class:mobilephone	file:
+outTime	mobilephone.cpp	/^    int outTime;\/\/出售时间$/;"	m	class:mobilephone	file:
+phone	mobilephone.cpp	/^class phone$/;"	c	file:
+sell	mobilephone.cpp	/^    bool sell;\/\/是否出售，true为出售,false为未出售$/;"	m	class:mobilephone	file:
+sell	mobilephone.cpp	/^vector<mobilephone>sell;\/\/销售数组$/;"	v
+setCompany	mobilephone.cpp	/^   void  setCompany(string c) { company = c; }$/;"	f	class:phone
+setId	mobilephone.cpp	/^    void setId(string i) {id = i; }$/;"	f	class:mobilephone
+setInPrice	mobilephone.cpp	/^   void  setInPrice(double in) {inPrice = in; }$/;"	f	class:phone
+setInTime	mobilephone.cpp	/^    void setInTime(int i) { inTime = i; }$/;"	f	class:mobilephone
+setModel	mobilephone.cpp	/^   void  setModel(string m) { model = m; }$/;"	f	class:phone
+setOutPrice	mobilephone.cpp	/^    void setOutPrice(double o) { outPrice = o; }$/;"	f	class:mobilephone
+setOutTime	mobilephone.cpp	/^    void setOutTime(int o) { outTime = o;}$/;"	f	class:mobilephone
+setSell	mobilephone.cpp	/^    void setSell(bool s) { sell = s; }$/;"	f	class:mobilephone
