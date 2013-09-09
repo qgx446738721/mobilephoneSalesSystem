@@ -6,9 +6,13 @@
  ************************************************************************/
 
 #include <iostream>
+#include <cstdlib>
 #include <string>
+#include <fstream>
 #include <iomanip>
 #include <vector>
+#include <map>
+#include <algorithm>
 using namespace std;
 
 class phone
@@ -48,6 +52,30 @@ public:
     double getOutPrice() { return outPrice; }
     int getOutTime() { return outTime; }
     bool getSell() { return sell; }
+    friend istream& operator>>(istream &,mobilephone &);//重载输入运算符
+	friend ostream& operator<<(ostream &,mobilephone &);//重载输出运算符
+};
+
+class Profit//利润类
+{
+private:
+    string name;
+    double pro;//利润
+public:
+    Profit() {name = ""; pro = 0.0;}
+    Profit(string str,double p)
+	{
+		name=str,p=pro;
+	}
+	void Outputs(int i)
+	{
+		cout << setiosflags(ios::left) << setw(10) << name << setw(10) << pro << setw(5) << i << endl;
+		cout << resetiosflags(ios::left);
+	}
+	bool operator<(const Profit &v)const
+	{
+		return pro>v.pro;
+	}
 };
 
 mobilephone::mobilephone()//初始化手机
@@ -82,7 +110,7 @@ mobilephone mobilephone::Intput()//输入手机信息
 	cin>> company;
 	cout << "请输入型号" << endl;
 	cin >> model;
-	cout << "请输入入库时间(用空格分开)" << endl;
+	cout << "请输入入库时间(例如：20130908)" << endl;
     cin >> inTime;
 	cout << "请输入进价" << endl;
 	cin >> inPrice;
@@ -98,6 +126,31 @@ mobilephone mobilephone::Intput()//输入手机信息
 	return *this;
 }
 
+istream& operator>>(istream &in,mobilephone &v)//重载输入运算符
+{
+	in >> v.id;
+	in >> v.company;
+	in >> v.model;
+	in >> v.inTime;
+	in >> v.inPrice;
+	in >> v.outPrice;
+	in >> v.outTime;
+	in >> v.sell;
+	return in;
+}
+
+ostream& operator <<(ostream &out,mobilephone &v)//重载输出运算符
+{
+	out << v.id << endl;
+	out << v.company << endl;
+	out << v.model << endl;
+	out << v.inTime << endl;
+	out << v.inPrice << endl;
+	out << v.outPrice << endl;
+	out << v.outTime << endl;
+	out << v.sell << endl;
+	return out;
+}
 vector<mobilephone>mobile;//手机数组
 vector<mobilephone>sell;//销售数组
 
@@ -324,6 +377,8 @@ void QueryMobilephone()//根据条件查询
 	cout<<"	4)按库存数量"<<endl;
 	cout<<"	0)退出"<<endl;
     int chance;
+    double lPrice, rPrice;//价格区间
+    vector<mobilephone>::iterator ite;
     cin >> chance;
     switch(chance)
     {
@@ -331,21 +386,90 @@ void QueryMobilephone()//根据条件查询
     case 1:
         {
             /*按价格查询*/
+            cout << "输入价格区间(以空格分割):" << endl;
+            cin >> lPrice >> rPrice;
+            cout << setiosflags(ios::left);
+			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商" 
+                << setw(10) << "型号" << setw(10) << "进价" 
+                << setw(10) << "进货时间" << setw(10) << "出售价" 
+                << setw(10) << "出售时间" << endl;
+			cout<<resetiosflags(ios::left);
+			for(ite = mobile.begin(); ite != mobile.end(); ite++)
+			{
+				if (ite->getInPrice() >= lPrice && ite->getInPrice() < rPrice)
+				{
+					ite->Output();
+				}
+			}
             break;
         }
     case 2:
         {
             /*按型号查询*/
+            cout << "输入手机型号：" << endl;
+            string m;
+            cin >> m;
+            cout << setiosflags(ios::left);
+			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商" 
+                << setw(10) << "型号" << setw(10) << "进价" 
+                << setw(10) << "进货时间" << setw(10) << "出售价" 
+                << setw(10) << "出售时间" << endl;
+			cout<<resetiosflags(ios::left);
+            for (ite = mobile.begin(); ite != mobile.end(); ite++)
+            {
+                if (ite->getModel() == m)
+                {
+                    ite->Output();
+                }
+            }
             break;
         }
     case 3:
         {
             /*按厂商查询*/
+            cout << "输入手机厂商：" << endl;
+            string m;
+            cin >> m;
+            cout << setiosflags(ios::left);
+			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商" 
+                << setw(10) << "型号" << setw(10) << "进价" 
+                << setw(10) << "进货时间" << setw(10) << "出售价" 
+                << setw(10) << "出售时间" << endl;
+			cout<<resetiosflags(ios::left);
+            for (ite = mobile.begin(); ite != mobile.end(); ite++)
+            {
+                if (ite->getCompany() == m)
+                {
+                    ite->Output();
+                }
+            }
             break;
         }
     case 4:
         {
             /*按库存量查询*/
+            cout << "输入库存量范围（空格分割）";
+            int lNum, rNum;
+            cin >> lNum >> rNum;
+            /*统计库存量*/
+            map<string,int>temp;
+            vector<mobilephone>::iterator ite;
+            for (ite = mobile.begin(); ite != mobile.end(); ite++)
+            {
+                temp[ite->getModel()]++;
+            }
+            /*在范围内查找*/
+            cout<<setiosflags(ios::left);
+            cout<<setw(10)<<"型号"<<setw(10)<<"库存量"<<endl;
+            map<string,int>::iterator ite2;
+            for (ite2 = temp.begin(); ite2 != temp.end(); ite2++)
+            {
+                if (ite2->second >= lNum && ite2->second <= rNum)
+                {
+                    cout << setw(10) << ite2->first << setw(10) << ite2->second << endl;
+                }
+            }
+            cout<<resetiosflags(ios::left);
             break;
         }
     default:
@@ -356,22 +480,321 @@ void QueryMobilephone()//根据条件查询
     }
 }
 
+void sellOutModeleProfit()//各类手机的销售利润统计
+{
+    map<string,double>temp;//model到profit的映射
+    vector<mobilephone>::iterator ite;
+    for (ite = sell.begin(); ite != sell.end(); ite++)
+    {
+        temp[ite->getModel()] += ite->getOutPrice() - ite->getInPrice();
+    }
+    map<string,double>::iterator ite2;
+	vector<Profit>pro;//利润容器
+    for (ite2 = temp.begin(); ite2 != temp.end(); ite2++)
+    {
+        pro.push_back(Profit(ite2->first,ite2->second));//将利润放入容器
+    }
+	sort(pro.begin(),pro.end());//排序
+	int len=pro.size();
+	cout << setiosflags(ios::left) << setw(10)<<"型号" << setw(10)<<"利润" << setw(5) << "排名" << endl;
+	cout << resetiosflags(ios::left);
+	for(int i = 0; i < len; i++)
+	{
+		pro[i].Outputs(i+1);
+	}
+}
+
+void sellOutCompanyProfit()//各类产商的手机销售利润统计
+{
+    map<string,double>temp;//company到profit的映射
+	vector<mobilephone>::iterator ite;
+	for(ite = sell.begin(); ite != sell.end(); ite++)
+	{
+		temp[ite->getCompany()] += ite->getOutPrice() - ite->getInPrice();
+	}
+	map<string,double>::iterator ite2;
+	vector<Profit>pro;
+	for(ite2 = temp.begin(); ite2 != temp.end(); ite2++)
+	{
+		pro.push_back(Profit(ite2->first,ite2->second));//将利润放入容器
+	}
+	sort(pro.begin(),pro.end());//排序
+	int len=pro.size();
+	cout << setiosflags(ios::left) << setw(10) << "厂商" << setw(10) << "利润" << setw(5) << "排名" << endl;
+	cout << resetiosflags(ios::left);
+	for(int i = 0; i < len; i++)
+	{
+		pro[i].Outputs(i+1);
+	}
+}
+
 void SalesStatistics()//销售信息统计
 {
+    cout << "请选择数字标号：";
+    cout << "1)某一时间段内某一型号的手机销售数量" << endl;
+    cout << "2)某一时间段内某一型号的手机利润" << endl;
+    cout << "3)某一时间段内的销售总利润" << endl;
+    cout << "4)各类手机的销售利润统计" << endl;
+    cout << "5)各类产商的手机销售利润统计" << endl;
+    cout << "6)手机在各个时间段的销售情况统计" << endl;
+    cout << "0)退出" << endl;
+    int chance;
+    int lTime, rTime;//时间段
+    cin >> chance;
+    switch(chance)
+    {
+    case 1:
+        {
+            /*某一时间段内某一型号的手机销售数量*/
+            string company, model;//手机厂商和型号
+            int num = 0;//销售数量
+            cout << "输入时间段（空格分割）";
+            cin >> lTime >> rTime;
+            cout << "输入手机厂商，型号：";
+            cin >> company >> model;
+            vector<mobilephone>::iterator ite;
+            for (ite = sell.begin(); ite != sell.end(); ite++)
+            {
+                if (ite->getCompany() == company && ite->getModel() == model 
+                        && ite->getOutTime() >= lTime && ite->getOutTime() <= rTime)
+                    num++;
+            }
+            cout << "在" << lTime << "与" << rTime << "之间," << company << model << "销售量为" << num << endl;
+            break;
+        }
+    case 2:
+        {
+            /*某一时间段内某一型号的手机利润*/
+            string company, model;//手机厂商和型号
+            double money = 0.0;//利润
+            cout << "输入时间段（空格分割）";
+            cin >> lTime >> rTime;
+            cout << "输入手机厂商，型号：";
+            cin >> company >> model;
+            vector<mobilephone>::iterator ite;
+            for (ite = sell.begin(); ite != sell.end(); ite++)
+            {
+                if (ite->getCompany() == company && ite->getModel() == model 
+                        && ite->getOutTime() >= lTime && ite->getOutTime() <= rTime)
+                {
+                    money += ite->getOutPrice() - ite->getInPrice();
+                }
+            }
+            cout << "在" << lTime << "与" << rTime << "之间," << company << model << "利润为" << money << endl;
 
+            break;
+        }
+    case 3:
+        {
+            /*某一时间段内的销售总利润*/
+            double money = 0.0;//利润
+            cout << "输入时间段（空格分割）";
+            cin >> lTime >> rTime;
+            vector<mobilephone>::iterator ite;
+            for (ite = sell.begin(); ite != sell.end(); ite++)
+            {
+                if (ite->getOutTime() >= lTime && ite->getOutTime() <= rTime)
+                {
+                    money += ite->getOutPrice() - ite->getInPrice();
+                }
+            }
+            cout << "在" << lTime << "与" << rTime << "之间," <<  "销售利润为" << money << endl;
+
+            break;
+        }
+    case 4:
+        {
+            /*各类手机的销售利润统计*/
+            sellOutModeleProfit();
+            break;
+        }
+    case 5:
+        {
+            /*各类产商的手机销售利润统计*/
+            sellOutCompanyProfit();
+            break;
+        }
+    case 6:
+        {
+            /*手机在各个时间段的销售情况统计*/
+            cout << "输入时间段（空格分割）";
+            cin >> lTime >> rTime;
+            map<string,int>temp;
+            vector<mobilephone>::iterator ite;
+            for (ite = sell.begin(); ite != sell.end(); ite++)
+            {
+                if (ite->getOutTime() >= lTime && ite->getOutTime() <= rTime)
+                {
+                    temp[ite->getModel()]++;
+                }
+            }
+            cout << setiosflags(ios::left);
+            cout << setw(10) << "类型" << setw(10) << "销售量" <<endl;
+            map<string,int>::iterator ite2;
+            for(ite2 = temp.begin(); ite2 != temp.end(); ite2++)
+            {
+                cout << setw(10) << ite2->first << setw(10) << ite2->second <<endl;
+            }
+            break;
+        }
+    case 0:
+        {
+            /*退出*/  
+            break;
+        }
+    default:
+        {
+            cout << "选择错误！" << endl;
+            SalesStatistics();
+        }
+    }
 }
 
 void ReadFile()//读取文件到内存中
 {
-
+	ifstream inFile;
+	inFile.open("mobile.txt",ios::in);
+	if (inFile.fail())
+	{
+		cout << "没有手机文件信息" << endl;
+	}
+	else
+	{
+		mobilephone temp;
+		inFile >> temp;
+		while (!inFile.eof())
+		{
+			mobile.push_back(temp);
+			inFile >> temp;
+		}
+	}
+	ifstream inFile2;
+	inFile2.open("sell.txt",ios::in);
+	if (inFile2.fail())
+	{
+		cout<<"没有销售文件信息"<<endl;
+	}
+    else
+    {
+        mobilephone temp;
+        inFile2 >> temp;
+        while (!inFile.eof())
+        {
+            sell.push_back(temp);
+            inFile2 >> temp;
+        }
+    }
 }
 
 void WriteFile()//写入内存中的数据到文件
 {
+    ofstream outFile;
+	outFile.open("mobile.txt",ios::out);
+	if (outFile.fail())
+	{
+		cout<<"文件读取失败，无法存入手机信息文件!"<<endl;
+	}
+	else
+	{
+		vector<mobilephone>::iterator ite;
+		for(ite = mobile.begin(); ite != mobile.end(); ite++)
+		{
+			outFile << *ite;
+		}
+	}
+	ofstream outFile2;
+	outFile2.open("sell.txt",ios::out);
+	if (outFile2.fail())
+	{
+		cout<<"文件读取失败，无法存入销售信息文件"<<endl;
+	}
+    else
+    {
+        vector<mobilephone>::iterator ite;
+        for(ite = sell.begin(); ite != sell.end(); ite++)
+        {
+            outFile2 << *ite;
+        }
+    }
+}
 
+void menu()
+{
+    while(true)
+    {
+        cout << "|**********手机销售管理系统V1.0**********|" << endl;
+        cout << "1> 添加手机信息" << endl;
+        cout << "2> 修改手机信息" << endl;
+        cout << "3> 删除手机信息" << endl;
+        cout << "4> 添加销售列表" << endl;
+        cout << "5> 修改销售列表" << endl;
+        cout << "6> 删除销售列表" << endl;
+        cout << "7> 手机信息查询" << endl;
+        cout << "8> 销售信息统计" << endl;
+        cout << "0> 退出系统" << endl;
+        cout << "输入选择项的编号：";
+        int chance;
+        cin >> chance;
+        switch(chance)
+        {
+        case 1:
+            {
+                AddMobilephone();
+                break;
+            }
+        case 2:
+            {
+                ChangeMobilephoneMessage();
+                break;
+            }
+        case 3:
+            {
+                DeleteMobilephone();
+                break;
+            }
+        case 4:
+            {
+                AddSalesList();
+                break;
+            }
+        case 5:
+            {
+                ChangeSalesList();
+                break;
+            }
+        case 6:
+            {
+                DeleteSalesList();
+                break;
+            }
+        case 7:
+            {
+                QueryMobilephone();
+                break;
+            }
+        case 8:
+            {
+                SalesStatistics();
+                break;
+            }
+        case 0:
+            {
+                WriteFile();
+                exit(0);
+            }
+        default:
+            {
+                cout << "输入错误!" << endl;
+                menu();
+            }
+        }
+    }
 }
 
 int main()
 {
+    ReadFile();
+    menu();
+    WriteFile();
     return 0;
 }

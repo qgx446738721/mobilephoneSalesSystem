@@ -10,11 +10,17 @@ ChangeMobilephoneMessage	mobilephone.cpp	/^bool ChangeMobilephoneMessage()\/\/�
 ChangeSalesList	mobilephone.cpp	/^bool ChangeSalesList()\/\/修改销售列表$/;"	f
 DeleteMobilephone	mobilephone.cpp	/^bool DeleteMobilephone()\/\/删除手机,修改成功返回true,失败返回false$/;"	f
 DeleteSalesList	mobilephone.cpp	/^bool DeleteSalesList()\/\/删除销售列表,删除成功返回true$/;"	f
-FindMobilephone	mobilephone.cpp	/^void FindMobilephone()\/\/查询$/;"	f
+FindMobilephone	mobilephone.cpp	/^void FindMobilephone()\/\/查询,手机厂商和型号$/;"	f
 Intput	mobilephone.cpp	/^mobilephone mobilephone::Intput()\/\/输入手机信息$/;"	f	class:mobilephone
 Output	mobilephone.cpp	/^void mobilephone::Output()\/\/输出手机的编号，厂商，型号，进价，入库日期，出售价格，出售日期$/;"	f	class:mobilephone
 OutputCompanyAndModel	mobilephone.cpp	/^void OutputCompanyAndModel(phone p)\/\/通过厂商和型号进行查找手机$/;"	f
+Outputs	mobilephone.cpp	/^	void Outputs(int i)$/;"	f	class:Profit
+Profit	mobilephone.cpp	/^    Profit() {name = ""; pro = 0.0;}$/;"	f	class:Profit
+Profit	mobilephone.cpp	/^    Profit(string str,double p)$/;"	f	class:Profit
+Profit	mobilephone.cpp	/^class Profit\/\/利润类$/;"	c	file:
+QueryMobilephone	mobilephone.cpp	/^void QueryMobilephone()\/\/根据条件查询$/;"	f
 ReadFile	mobilephone.cpp	/^void ReadFile()\/\/读取文件到内存中$/;"	f
+SalesStatistics	mobilephone.cpp	/^void SalesStatistics()\/\/销售信息统计$/;"	f
 WriteFile	mobilephone.cpp	/^void WriteFile()\/\/写入内存中的数据到文件$/;"	f
 company	mobilephone.cpp	/^    string company;\/\/厂商$/;"	m	class:phone	file:
 getCompany	mobilephone.cpp	/^   string getCompany() { return company; }$/;"	f	class:phone
@@ -29,15 +35,22 @@ id	mobilephone.cpp	/^    string id;\/\/编号$/;"	m	class:mobilephone	file:
 inPrice	mobilephone.cpp	/^    double inPrice;\/\/进价$/;"	m	class:phone	file:
 inTime	mobilephone.cpp	/^    int inTime;\/\/入库时间$/;"	m	class:mobilephone	file:
 main	mobilephone.cpp	/^int main()$/;"	f
+menu	mobilephone.cpp	/^void menu()$/;"	f
 mobile	mobilephone.cpp	/^vector<mobilephone>mobile;\/\/手机数组$/;"	v
 mobilephone	mobilephone.cpp	/^class mobilephone : public phone$/;"	c	file:
 mobilephone	mobilephone.cpp	/^mobilephone::mobilephone()\/\/初始化手机$/;"	f	class:mobilephone
 model	mobilephone.cpp	/^    string model;\/\/型号$/;"	m	class:phone	file:
+name	mobilephone.cpp	/^    string name;$/;"	m	class:Profit	file:
+operator <<	mobilephone.cpp	/^ostream& operator <<(ostream &out,mobilephone &v)\/\/重载输出运算符$/;"	f
+operator >>	mobilephone.cpp	/^istream& operator>>(istream &in,mobilephone &v)\/\/重载输入运算符$/;"	f
 outPrice	mobilephone.cpp	/^    double outPrice;\/\/出售价格$/;"	m	class:mobilephone	file:
 outTime	mobilephone.cpp	/^    int outTime;\/\/出售时间$/;"	m	class:mobilephone	file:
 phone	mobilephone.cpp	/^class phone$/;"	c	file:
+pro	mobilephone.cpp	/^    double pro;\/\/利润$/;"	m	class:Profit	file:
 sell	mobilephone.cpp	/^    bool sell;\/\/是否出售，true为出售,false为未出售$/;"	m	class:mobilephone	file:
 sell	mobilephone.cpp	/^vector<mobilephone>sell;\/\/销售数组$/;"	v
+sellOutCompanyProfit	mobilephone.cpp	/^void sellOutCompanyProfit()\/\/各类产商的手机销售利润统计$/;"	f
+sellOutModeleProfit	mobilephone.cpp	/^void sellOutModeleProfit()\/\/各类手机的销售利润统计$/;"	f
 setCompany	mobilephone.cpp	/^   void  setCompany(string c) { company = c; }$/;"	f	class:phone
 setId	mobilephone.cpp	/^    void setId(string i) {id = i; }$/;"	f	class:mobilephone
 setInPrice	mobilephone.cpp	/^   void  setInPrice(double in) {inPrice = in; }$/;"	f	class:phone
