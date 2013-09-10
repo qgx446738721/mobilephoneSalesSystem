@@ -245,9 +245,20 @@ bool DeleteMobilephone()//删除手机,修改成功返回true,失败返回false
     {
         if (ite->getId() == ID)
         {
-            mobile.erase(ite);//删除手机信息
-            del = true;
-            break;
+            cout << "是否删除该手机?(y/n)";
+            char c;
+            cin >> c;
+            if (c == 'y' || c == 'Y')
+            {
+                mobile.erase(ite);//删除手机信息
+                del = true;
+                break;
+            }
+            else
+            {
+                cout << "取消操作！" << endl;
+                return false;
+            }
         }
     }
     if (del == true)
@@ -370,12 +381,15 @@ bool ChangeSalesList()//修改销售列表
 
 void QueryMobilephone()//根据条件查询
 {
+    cout << endl;
+    cout << "手机信息查询" << endl;
     cout<<"请选择数字标号"<<endl;
-	cout<<"	1)按价格"<<endl;
-	cout<<"	2)按型号"<<endl;
-	cout<<"	3)按厂商"<<endl;
-	cout<<"	4)按库存数量"<<endl;
-	cout<<"	0)退出"<<endl;
+	cout<<"1)按价格"<<endl;
+	cout<<"2)按型号"<<endl;
+	cout<<"3)按厂商"<<endl;
+	cout<<"4)按库存数量"<<endl;
+    cout<<"5)显示所有手机记录"<< endl;
+	cout<<"0)退出"<<endl;
     int chance;
     double lPrice, rPrice;//价格区间
     vector<mobilephone>::iterator ite;
@@ -472,6 +486,20 @@ void QueryMobilephone()//根据条件查询
             cout<<resetiosflags(ios::left);
             break;
         }
+    case 5:
+        {
+            vector<mobilephone>::iterator ite;
+            cout << "所有手机信息显示" <<endl;
+            cout << setiosflags(ios::left);
+            cout<<setw(22)<<setfill(' ')<<"编号"<<setw(10)<<"厂商"<<setw(12)<<"型号"<<setw(12)<<"进价"<<setw(15)<<"进货时间"<<setw(12)<<"出售价"<<setw(12)<<"出售时间"<<endl;
+            for (ite = mobile.begin(); ite != mobile.end(); ite++)
+            {
+                    ite->Output();
+            }
+            cout << endl;
+            cout << resetiosflags(ios::left);
+            break;
+        }
     default:
         {
             QueryMobilephone();
@@ -530,14 +558,15 @@ void sellOutCompanyProfit()//各类产商的手机销售利润统计
 
 void SalesStatistics()//销售信息统计
 {
-    cout << "请选择数字标号：";
-    cout << "1)某一时间段内某一型号的手机销售数量" << endl;
-    cout << "2)某一时间段内某一型号的手机利润" << endl;
-    cout << "3)某一时间段内的销售总利润" << endl;
-    cout << "4)各类手机的销售利润统计" << endl;
-    cout << "5)各类产商的手机销售利润统计" << endl;
-    cout << "6)手机在各个时间段的销售情况统计" << endl;
-    cout << "0)退出" << endl;
+    cout << "请选择数字标号：" << endl;
+    cout << " 1)某一时间段内某一型号的手机销售数量" << endl;
+    cout << " 2)某一时间段内某一型号的手机利润" << endl;
+    cout << " 3)某一时间段内的销售总利润" << endl;
+    cout << " 4)各类手机的销售利润统计" << endl;
+    cout << " 5)各类产商的手机销售利润统计" << endl;
+    cout << " 6)手机在各个时间段的销售情况统计" << endl;
+    cout << " 7)显示所有销售记录" << endl;
+    cout << " 0)退出" << endl;
     int chance;
     int lTime, rTime;//时间段
     cin >> chance;
@@ -637,6 +666,15 @@ void SalesStatistics()//销售信息统计
             }
             break;
         }
+    case 7:
+        {
+            vector<mobilephone>::iterator ite;
+            for (ite = sell.begin(); ite != sell.end(); ite++)
+            {
+                cout << setw(10) << ite->getId() << setw(10) << ite->getCompany() << setw(10) << ite->getModel()
+                    << setw(10) << ite->getOutPrice() << endl;
+            }
+        }
     case 0:
         {
             /*退出*/  
@@ -678,7 +716,7 @@ void ReadFile()//读取文件到内存中
     {
         mobilephone temp;
         inFile2 >> temp;
-        while (!inFile.eof())
+        while (!inFile2.eof())
         {
             sell.push_back(temp);
             inFile2 >> temp;
@@ -795,6 +833,6 @@ int main()
 {
     ReadFile();
     menu();
-    WriteFile();
+    //WriteFile();
     return 0;
 }
