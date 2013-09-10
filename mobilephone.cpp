@@ -15,6 +15,21 @@
 #include <algorithm>
 using namespace std;
 
+bool JudgeTimeWrong(int time)//判断时间是否合法
+{
+    int year, month, day;
+    year = time / 10000;
+    month = (time % 10000) /100;
+    day = time % 100;
+    if (year >= 1000 && year <= 3000 && month >= 1 && month <= 12 && day >= 1 && day <= 31)
+        return false;
+    else
+    {
+        cout << "日期错误！" <<endl;
+        return true;
+    }
+}
+
 class phone
 {
 protected:
@@ -42,6 +57,7 @@ public:
     mobilephone();
     void Output();//输出手机信息
     mobilephone Intput();//输入手机信息
+    mobilephone Change();//修改
     void setId(string i) {id = i; }
     void setInTime(int i) { inTime = i; }
     void setOutPrice(double o) { outPrice = o; }
@@ -92,7 +108,7 @@ void mobilephone::Output()//输出手机的编号，厂商，型号，进价，�
 	cout << setw(10) << company
          << setw(10) << model
          << setw(10) << inPrice
-         << setw(4) << inTime/10000 << '-' << (inTime%10000)/100 << '-' << inTime%100;
+         << setw(4) << inTime/10000 << '-' << (inTime%10000)/100 << '-' << setw(4) <<inTime%100;
 	if (sell)
 	{
 		cout << setw(10) << outPrice
@@ -110,8 +126,11 @@ mobilephone mobilephone::Intput()//输入手机信息
 	cin>> company;
 	cout << "请输入型号" << endl;
 	cin >> model;
-	cout << "请输入入库时间(例如：20130908)" << endl;
-    cin >> inTime;
+	do
+	{
+        cout << "请输入入库时间(例如：20130908)" << endl;
+        cin >> inTime;
+	} while (JudgeTimeWrong(inTime));
 	cout << "请输入进价" << endl;
 	cin >> inPrice;
 	cout << "是否销售 0（否）/非零（是）" <<endl;
@@ -120,12 +139,55 @@ mobilephone mobilephone::Intput()//输入手机信息
 	{
 		cout << "请输出销售价格" << endl;
 		cin >> outPrice;
-		cout << "请输销售时间(用空格分开)" << endl;
+		cout << "请输销售时间" << endl;
         cin >> outTime;
 	}
 	return *this;
 }
 
+mobilephone mobilephone::Change()//修改
+{
+    string strTemp;
+    int intTemp;
+    double douTemp;
+    cout << "请输入编号" << endl;
+	cin >> id;
+	cout << "请输入厂商,“...”代表跳过此项" << endl;
+	cin>> strTemp;
+	if (strTemp != "...")
+        company = strTemp;
+	cout << "请输入型号,“...”代表跳过此项" << endl;
+	cin>> strTemp;
+	if (strTemp != "...")
+        model = strTemp;
+    do
+    {
+        cout << "请输入入库时间(例如：20130908),“0”代表跳过此项" << endl;
+        cin >> intTemp;
+        if (intTemp != 0)
+            inTime = intTemp;
+        else
+            break;
+    } while(JudgeTimeWrong(inTime));
+	cout << "请输入进价,“0”代表跳过此项" << endl;
+	cin >> douTemp;
+	if (douTemp != 0)
+        inPrice = douTemp;
+	cout << "是否销售 0（否）/非零（是）" <<endl;
+	cin >> sell;
+	if (sell)
+	{
+		cout << "请输出销售价格,“0”代表跳过此项" << endl;
+		cin >> douTemp;
+        if (douTemp != 0)
+            outPrice = douTemp;
+		cout << "请输销售时间(用空格分开),“0”代表跳过此项" << endl;
+        cin >> intTemp;
+        if (intTemp != 0)
+            outTime = intTemp;
+	}
+	return *this;
+}
 istream& operator>>(istream &in,mobilephone &v)//重载输入运算符
 {
 	in >> v.id;
@@ -167,7 +229,7 @@ void AddMobilephone()//添加手机信息
 			return;
 		}
 	}
-	phone &v=*p;
+	//phone &v=*p;
     p->setSell(false);
 	mobile.push_back(*p);
 }
@@ -187,7 +249,7 @@ void OutputCompanyAndModel(phone p)//通过厂商和型号进行查找手机
 	}
 }
 
-void FindMobilephone()//查询,手机厂商和型号
+void FindMobilephone(string &c, string &m)//查询,手机厂商和型号
 {
     phone temp;
     string com, mo;
@@ -198,36 +260,25 @@ void FindMobilephone()//查询,手机厂商和型号
     temp.setCompany(com);
     temp.setModel(mo);
     OutputCompanyAndModel(temp);//查找匹配厂商型号的手机
+    c = com;
+    m = mo;
 }
 
 bool ChangeMobilephoneMessage()//修改手机信息,修改成功返回true,失败返回false
 {
-    FindMobilephone();
+    string c, m;
+    FindMobilephone(c,m);
     string ID;
     cout << "输入手机的编号：";
     cin >> ID;
     vector<mobilephone>::iterator ite;
     for (ite = mobile.begin(); ite != mobile.end(); ite++)
     {
-        if (ite->getId() == ID)
+        if (ite->getId() == ID && ite->getCompany() == c && ite->getModel() == m)
         {
             cout << "输入修改后的手机信息" << endl;
-            if (ite->getSell())//修改出售的手机
-            {
-                mobilephone *p=new mobilephone();
-				p->Intput();
-                p->setOutPrice(ite->getOutPrice());
-                p->setOutTime(ite->getOutTime());
-				*ite=*p;
-				return true;
-            }
-            else
-            {
-                mobilephone *p=new mobilephone();
-				p->Intput();
-				*ite=*p;
-				return true;
-            }
+            ite->Change();
+            return true;
         }
     }
     return false;
@@ -235,7 +286,8 @@ bool ChangeMobilephoneMessage()//修改手机信息,修改成功返回true,失�
 
 bool DeleteMobilephone()//删除手机,修改成功返回true,失败返回false
 {
-    FindMobilephone();
+    string c ,m;
+    FindMobilephone(c,m);
     string ID;
     cout << "输入手机的编号：";
     cin >> ID;
@@ -275,7 +327,8 @@ bool DeleteMobilephone()//删除手机,修改成功返回true,失败返回false
 
 bool AddSalesList()//添加销售列表
 {
-    FindMobilephone();
+    string c,m;
+    FindMobilephone(c,m);
     cout << "输入销售手机编号:";
     string ID;
     cin >> ID;
@@ -298,9 +351,12 @@ bool AddSalesList()//添加销售列表
                double price;
                cin >> price;
                ite->setOutPrice(price);
-               cout << "输入销售日期：";
                int time;
-               cin >> time;
+               do
+               {
+                   cout << "输入销售日期：";
+                   cin >> time;
+               } while (JudgeTimeWrong(time));
                ite->setOutTime(time);
                ite->setSell(true);
                sell.push_back(*ite);
@@ -313,7 +369,8 @@ bool AddSalesList()//添加销售列表
 
 bool DeleteSalesList()//删除销售列表,删除成功返回true
 {
-    FindMobilephone();
+    string c,m;
+    FindMobilephone(c,m);
     cout << "输入销售手机编号:";
     string ID;
     cin >> ID;
@@ -338,12 +395,12 @@ bool DeleteSalesList()//删除销售列表,删除成功返回true
         }
     }
     return false;
-
 }
 
 bool ChangeSalesList()//修改销售列表
 {
-    FindMobilephone();
+    string c,m;
+    FindMobilephone(c,m);
     cout << "输入销售手机编号:";
     string ID;
     cin >> ID;
@@ -355,28 +412,26 @@ bool ChangeSalesList()//修改销售列表
             cout << "以下输入修改后的销售记录" << endl;
             if (ite->getSell())
             {
-               mobilephone *p = new mobilephone();
-               cout << "输入修改后销售价格：";
+               cout << "输入修改后销售价格 “0代表跳过此项”:";
                double price;
                cin >> price;
-               p->setOutPrice(price);
-               cout << "输入修改后销售日期：";
-               int time;
-               cin >> time;
-               p->setOutTime(time);
-               p->setId(ite->getId());
-               p->setCompany(ite->getCompany());
-               p->setModel(ite->getModel());
-               p->setInPrice(ite->getInPrice());
-               p->setInTime(ite->getInTime());
-               p->setSell(ite->getSell());
-               *ite = *p;
+               if (price != 0)
+                    ite->setOutPrice(price);
+                int time;
+                do
+                {
+                   cout << "输入修改后销售日期“0代表跳过此项”:";
+                   cin >> time;
+                   if (time != 0)
+                        ite->setOutTime(time);
+                    else
+                        break;
+                } while (JudgeTimeWrong(ite->getOutTime()));
                return true;
             }
         }
     }
     return false;
-
 }
 
 void QueryMobilephone()//根据条件查询
@@ -403,9 +458,9 @@ void QueryMobilephone()//根据条件查询
             cout << "输入价格区间(以空格分割):" << endl;
             cin >> lPrice >> rPrice;
             cout << setiosflags(ios::left);
-			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商" 
-                << setw(10) << "型号" << setw(10) << "进价" 
-                << setw(10) << "进货时间" << setw(10) << "出售价" 
+			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商"
+                << setw(10) << "型号" << setw(10) << "进价"
+                << setw(10) << "进货时间" << setw(10) << "出售价"
                 << setw(10) << "出售时间" << endl;
 			cout<<resetiosflags(ios::left);
 			for(ite = mobile.begin(); ite != mobile.end(); ite++)
@@ -424,9 +479,9 @@ void QueryMobilephone()//根据条件查询
             string m;
             cin >> m;
             cout << setiosflags(ios::left);
-			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商" 
-                << setw(10) << "型号" << setw(10) << "进价" 
-                << setw(10) << "进货时间" << setw(10) << "出售价" 
+			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商"
+                << setw(10) << "型号" << setw(10) << "进价"
+                << setw(10) << "进货时间" << setw(10) << "出售价"
                 << setw(10) << "出售时间" << endl;
 			cout<<resetiosflags(ios::left);
             for (ite = mobile.begin(); ite != mobile.end(); ite++)
@@ -445,9 +500,9 @@ void QueryMobilephone()//根据条件查询
             string m;
             cin >> m;
             cout << setiosflags(ios::left);
-			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商" 
-                << setw(10) << "型号" << setw(10) << "进价" 
-                << setw(10) << "进货时间" << setw(10) << "出售价" 
+			cout << setw(20) << setfill(' ') << "编号" << setw(10) << "厂商"
+                << setw(10) << "型号" << setw(10) << "进价"
+                << setw(10) << "进货时间" << setw(10) << "出售价"
                 << setw(10) << "出售时间" << endl;
 			cout<<resetiosflags(ios::left);
             for (ite = mobile.begin(); ite != mobile.end(); ite++)
@@ -491,7 +546,7 @@ void QueryMobilephone()//根据条件查询
             vector<mobilephone>::iterator ite;
             cout << "所有手机信息显示" <<endl;
             cout << setiosflags(ios::left);
-            cout<<setw(22)<<setfill(' ')<<"编号"<<setw(10)<<"厂商"<<setw(12)<<"型号"<<setw(12)<<"进价"<<setw(15)<<"进货时间"<<setw(12)<<"出售价"<<setw(12)<<"出售时间"<<endl;
+            cout<<setw(20)<<setfill(' ')<<"编号"<<setw(10)<<"厂商"<<setw(10)<<"型号"<<setw(10)<<"进价"<<setw(10)<<"进货时间"<<setw(10)<<"出售价"<<setw(10)<<"出售时间"<<endl;
             for (ite = mobile.begin(); ite != mobile.end(); ite++)
             {
                     ite->Output();
@@ -503,6 +558,8 @@ void QueryMobilephone()//根据条件查询
     default:
         {
             QueryMobilephone();
+            cin.clear();//清除输入流的错误状态
+            cin.ignore();//读取输入流中下一个字符并丢弃之
             break;
         }
     }
@@ -584,7 +641,7 @@ void SalesStatistics()//销售信息统计
             vector<mobilephone>::iterator ite;
             for (ite = sell.begin(); ite != sell.end(); ite++)
             {
-                if (ite->getCompany() == company && ite->getModel() == model 
+                if (ite->getCompany() == company && ite->getModel() == model
                         && ite->getOutTime() >= lTime && ite->getOutTime() <= rTime)
                     num++;
             }
@@ -603,7 +660,7 @@ void SalesStatistics()//销售信息统计
             vector<mobilephone>::iterator ite;
             for (ite = sell.begin(); ite != sell.end(); ite++)
             {
-                if (ite->getCompany() == company && ite->getModel() == model 
+                if (ite->getCompany() == company && ite->getModel() == model
                         && ite->getOutTime() >= lTime && ite->getOutTime() <= rTime)
                 {
                     money += ite->getOutPrice() - ite->getInPrice();
@@ -669,20 +726,25 @@ void SalesStatistics()//销售信息统计
     case 7:
         {
             vector<mobilephone>::iterator ite;
+            cout << setiosflags(ios::left) << setfill(' ');
             for (ite = sell.begin(); ite != sell.end(); ite++)
             {
                 cout << setw(10) << ite->getId() << setw(10) << ite->getCompany() << setw(10) << ite->getModel()
-                    << setw(10) << ite->getOutPrice() << endl;
+                    << setw(10) << ite->getOutPrice()
+                    << setw(4) << ite->getOutTime()/10000 << '-' << (ite->getOutTime()%10000)/100 << '-' << ite->getOutTime()%100 <<endl;
             }
+            cout << resetiosflags(ios::left);
         }
     case 0:
         {
-            /*退出*/  
+            /*退出*/
             break;
         }
     default:
         {
             cout << "选择错误！" << endl;
+            cin.clear();//清除输入流的错误状态
+            cin.ignore();//读取输入流中下一个字符并丢弃之
             SalesStatistics();
         }
     }
@@ -823,6 +885,10 @@ void menu()
         default:
             {
                 cout << "输入错误!" << endl;
+                //清空缓存区
+                //std::cin.clear();
+                cin.clear();//清除输入流的错误状态
+                cin.ignore();//读取输入流中下一个字符并丢弃之
                 menu();
             }
         }
