@@ -15,7 +15,6 @@
 #include<fstream>
 using namespace std;
 
-//沈伟强
 bool cmp(string a,string b)//判断a是不是b的前缀
 {
 	int len1=a.size(),len2=b.size();
@@ -33,7 +32,6 @@ bool cmp(string a,string b)//判断a是不是b的前缀
 	return true;
 }
 
-//沈伟强
 int InputInt(int &v)//整数输入判断
 {
 	while (scanf("%d",&v)!=1)
@@ -44,7 +42,6 @@ int InputInt(int &v)//整数输入判断
 	return v;
 }
 
-//沈伟强
 double InputDouble(double &v)//双精度输入判断
 {
 	while (scanf("%lf",&v)!=1)
@@ -55,7 +52,6 @@ double InputDouble(double &v)//双精度输入判断
 	return v;
 }
 
-//戚耿鑫
 int InputTime(int &times)//输入时间判断输入正确性
 {
 	int tempYear,tempMonth,tempDay;
@@ -87,7 +83,6 @@ int InputTime(int &times)//输入时间判断输入正确性
 	}
 }
 
-//沈伟强
 double InputPrice(double &pri)//输入价格判断正确性
 {
 	while (scanf("%lf",&pri)!=1)
@@ -98,7 +93,6 @@ double InputPrice(double &pri)//输入价格判断正确性
 	return pri;
 }
 
-//戚耿鑫
 struct Father
 {
 	string company;//生产商
@@ -118,7 +112,6 @@ struct Father
 	}
 };
 
-//戚耿鑫
 struct phone:public Father
 {
 	//方法
@@ -168,7 +161,6 @@ vector<phone>mobile;//手机数组
 vector<phone>selt;//销售数组
 map<Father,int>type;//手机库存
 
-//戚耿鑫
 phone::phone()//默认构造函数，初始化
 {
 	outTime=inTime=0;
@@ -177,7 +169,6 @@ phone::phone()//默认构造函数，初始化
 	selt=false;
 }
 
-//戚耿鑫
 void phone::Output()//输出编号，厂商，型号，进价，进货时间，出售价，出售时间
 {
 	cout<<setiosflags(ios::left)<<setw(20)<<setfill(' ')<<id;
@@ -190,7 +181,6 @@ void phone::Output()//输出编号，厂商，型号，进价，进货时间，�
 	cout<<resetiosflags(ios::left);
 }
 
-//戚耿鑫
 phone phone::Input()
 {
 	string strTemp;
@@ -257,7 +247,6 @@ phone phone::Input()
 	return *this;
 }
 
-//沈伟强
 struct Profit
 {
 	Profit()
@@ -282,7 +271,6 @@ struct Profit
 	double pro;//利润
 };
 
-//张蕾
 void OutputsFactAndType(Father temp)//按型号和厂商查找
 {
 	vector<phone>::iterator ite;
@@ -298,7 +286,6 @@ void OutputsFactAndType(Father temp)//按型号和厂商查找
 	}
 }
 
-//卢文思
 bool AddPhone()//添加手机信息
 {
 	phone *p=new phone();
@@ -319,7 +306,6 @@ bool AddPhone()//添加手机信息
 	return true;
 }
 
-//卢文思
 bool ChangePhoneMessage()//改变手机信息
 {
 	Father temp;
@@ -349,7 +335,6 @@ bool ChangePhoneMessage()//改变手机信息
 	return false;
 }
 
-//卢文思
 bool DeletePhone()//删除手机信息,删除失败返回false
 {
 	Father temp;
@@ -390,7 +375,6 @@ bool DeletePhone()//删除手机信息,删除失败返回false
 	return flag;
 }
 
-//卢文思
 bool AddLsit()//添加销售信息,无存货返回false
 {
 	Father temp;
@@ -430,7 +414,6 @@ bool AddLsit()//添加销售信息,无存货返回false
 	return false;
 };
 
-//卢文思
 bool DeleteList()//删除销售信息
 {
 	Father temp;
@@ -475,7 +458,6 @@ bool DeleteList()//删除销售信息
 	return false;
 }
 
-//沈伟强
 int sellOutNum(int startTime,int endTime,string t)//在区间[startTime,endTime)，t类型的销售数
 {
 	int ans=0;
@@ -488,7 +470,6 @@ int sellOutNum(int startTime,int endTime,string t)//在区间[startTime,endTime)
 	return ans;
 }
 
-//沈伟强
 double sellOutPro(int startTime,int endTime,string t)//在区间[startTime,endTime)，t厂商的利润
 {
 	double ans=0.0;
@@ -503,7 +484,6 @@ double sellOutPro(int startTime,int endTime,string t)//在区间[startTime,endTi
 	return ans;
 }
 
-//沈伟强
 double sellOutPro1(int startTime,int endTime,string t)////在区间[startTime,endTime)，t类型的利润
 {
     double ans=0.0;
@@ -518,7 +498,6 @@ double sellOutPro1(int startTime,int endTime,string t)////在区间[startTime,en
 	return ans;
 }
 
-//戚耿鑫
 void sellOutFacNum(int start,int end)//某一段时间内，厂商的销售量
 {
 	map<string,int>temp;
@@ -539,7 +518,6 @@ void sellOutFacNum(int start,int end)//某一段时间内，厂商的销售量
 	}
 }
 
-//戚耿鑫
 void sellOutTypeNum(int start,int end)//某一段时间内的，型号销售信息
 {
 	map<string,int>temp;
@@ -560,7 +538,6 @@ void sellOutTypeNum(int start,int end)//某一段时间内的，型号销售信�
 	}
 }
 
-//戚耿鑫
 void sellOutFacProfit()//按厂商利润排名，从高到低
 {
 	map<string,double>temp;
@@ -590,7 +567,6 @@ void sellOutFacProfit()//按厂商利润排名，从高到低
 	cout<<"平均利润为："<<avePro/len<<endl;
 }
 
-//戚耿鑫
 void sellOutTypeProfit()//按型号利润排名，从高到低
 {
 	map<string,double>temp;
@@ -620,7 +596,6 @@ void sellOutTypeProfit()//按型号利润排名，从高到低
 	cout<<"平均利润为："<<avePro/len<<endl;
 }
 
-//刘金玲
 void QueryPhone()
 {
 	cout<<"请选择数字标号"<<endl;
@@ -710,7 +685,6 @@ void QueryPhone()
 	}
 }
 
-//刘金玲
 void QuerySelt()
 {
 	cout<<"请输入数字"<<endl;
@@ -734,7 +708,6 @@ void QuerySelt()
 	}
 }
 
-//刘金玲
 void QueryProfit()//询问利润
 {
 	cout<<"请输入数字"<<endl;
@@ -753,7 +726,6 @@ void QueryProfit()//询问利润
 	}
 }
 
-//张蕾
 void ReadFile()
 {
 	ifstream inFile;
@@ -789,7 +761,6 @@ void ReadFile()
 	}
 }
 
-//张蕾
 void WriteFile()
 {
 	ofstream outFile;
@@ -820,7 +791,6 @@ void WriteFile()
 	}
 }
 
-//张蕾
 void LeftNum()
 {
     vector<phone>::iterator ite;
@@ -834,7 +804,6 @@ void LeftNum()
     }
 }
 
-//张蕾
 double AllProfit(int startTime, int endTime)
 {
     double ans=0;
@@ -847,7 +816,6 @@ double AllProfit(int startTime, int endTime)
     return ans;
 }
 
-//刘金玲
 void SalesMenu()
 {
     cout<<"销售情况统计，请选择数字："<<endl;
@@ -916,7 +884,6 @@ void SalesMenu()
     }
 }
 
-//刘金玲
 void meun()
 {
     ReadFile();
